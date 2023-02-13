@@ -7,6 +7,7 @@
 
 name: Merge-upstream
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -18,7 +19,6 @@ on:
 
 jobs:
   merge:
-    if: github.event.repository.owner.id == github.event.sender.id
     runs-on: Ubuntu-20.04
 
     steps:
@@ -41,8 +41,8 @@ jobs:
         rm -rf ./feeds >/dev/null 2>&1
         mkdir feeds && cd feeds
 
-        # miniupnpd支持强行映射
-        svn export https://github.com/hzyitc/miniupnpd-openwrt-ptpt52-mod/trunk/miniupnpd
+        #luci-app-xray
+        git clone --depth 1 https://github.com/yichya/luci-app-xray
 
         # uu游戏加速器
         svn export https://github.com/immortalwrt/luci/branches/openwrt-21.02/applications/luci-app-uugamebooster
@@ -50,8 +50,8 @@ jobs:
 
         # vlmcsd
         svn export https://github.com/immortalwrt/luci/branches/openwrt-21.02/applications/luci-app-vlmcsd 
-        svn export https://github.com/immortalwrt/packages/branches/openwrt-21.02/net/vlmcsd 
-
+        svn export https://github.com/immortalwrt/packages/branches/openwrt-21.02/net/vlmcsd
+        
         # ssr-plus
         svn export https://github.com/immortalwrt/luci/branches/openwrt-21.02/applications/luci-app-ssr-plus
         
@@ -62,20 +62,26 @@ jobs:
         svn export https://github.com/Chikage0o0/openwrt-passwall2/trunk/luci-app-passwall2
 
         # openclash
-        # svn export https://github.com/vernesong/OpenClash/trunk/luci-app-openclash 暂时屏蔽最新版
-        svn export https://github.com/vernesong/OpenClash/tags/v0.44.42-beta/luci-app-openclash
+        svn export https://github.com/vernesong/OpenClash/trunk/luci-app-openclash
+        #svn export https://github.com/vernesong/OpenClash/tags/v0.44.42-beta/luci-app-openclash
 
         # passwall以及ssr-plus的依赖
         git clone --depth 1 -b packages https://github.com/Chikage0o0/openwrt-passwall
+        rm -rf openwrt-passwall/v2ray-geodata
+        rm -rf openwrt-passwall/sing-box
         mv -n `find openwrt-passwall/* -maxdepth 0 -type d` ./ && rm -rf openwrt-passwall
         svn export https://github.com/immortalwrt/packages/branches/openwrt-21.02/net/redsocks2
+        git clone --depth 1 https://github.com/sbwml/v2ray-geodata
 
         # 迅雷快鸟
         svn export https://github.com/immortalwrt/luci/branches/openwrt-21.02/applications/luci-app-xlnetacc
 
         # mosdns
-        svn export https://github.com/QiuSimons/openwrt-mos/trunk/luci-app-mosdns
-        svn export https://github.com/QiuSimons/openwrt-mos/trunk/mosdns
+        svn export https://github.com/sbwml/luci-app-mosdns/trunk/luci-app-mosdns
+        svn export https://github.com/sbwml/luci-app-mosdns/trunk/mosdns
+        
+        # sing-box
+        svn export https://github.com/Chikage0o0/sing-box_openwrt/trunk/sing-box
 
         # 主题
         svn export https://github.com/jerrykuku/luci-theme-argon/trunk ./luci-theme-argon
@@ -97,7 +103,7 @@ jobs:
         git clone --depth 1 https://github.com/rufengsuixing/luci-app-zerotier
         
         # Realtek 8125 驱动
-        svn export https://github.com/csrutil/OpenWrtDrivers/trunk/drivers/r8125
+        svn export https://github.com/csrutil/OpenWrt-NIC-Drivers/trunk/drivers/r8125
 
         # luci-app-nat6-helper
         git clone --depth 1 https://github.com/Ausaci/luci-app-nat6-helper
@@ -105,7 +111,7 @@ jobs:
         # 网易云音乐解锁
         svn export https://github.com/maxlicheng/luci-app-unblockmusic/trunk/app luci-app-unblockmusic
         svn export https://github.com/maxlicheng/luci-app-unblockmusic/trunk/UnblockNeteaseMusicGo
-        svn export https://github.com/maxlicheng/luci-app-unblockmusic/trunk/UnblockNeteaseMusic
+        #svn export https://github.com/maxlicheng/luci-app-unblockmusic/trunk/UnblockNeteaseMusic
 
         # 高级设置
         git clone --depth 1 https://github.com/sirpdboy/luci-app-advanced
